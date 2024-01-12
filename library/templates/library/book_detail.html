@@ -1,0 +1,39 @@
+{% extends 'library/base.html' %}
+
+{% block content %}
+<div style="background-color: #AEADB5; padding: 15px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+
+  <h1>{{ book.title }}</h1>
+
+  <div style="background-color: #716A86; padding: 5px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <h2><strong>Author:</strong> {{ book.author }}</h2>
+  </div>
+
+  <div style="background-color: #F2F2F2; padding: 15px; margin-top: 15px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <p><strong>Description:</strong> {{ book.description }}</p>
+  </div>
+
+  {% if book.image %}
+    <div style="margin-top: 15px;">
+      <img src="{{ book.image.url }}" alt="{{ book.title }} Image" style="max-width: 100%; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    </div>
+  {% endif %}
+
+  {% if not book.borrowed %}
+    <form method="post" action="{% url 'borrow_book' book.id %}">
+      {% csrf_token %}
+      <input type="submit" value="Borrow" style="margin-top: 40px;">
+    </form>
+  {% else %}
+
+  <p style="margin-top: 40px; font-size: 20px; color: red;">This book is currently borrowed!!</p>
+
+    <form method="post" action="{% url 'return_book' book.id %}">
+      {% csrf_token %}
+      <button type="submit" style="margin-top: 15px; padding: 15px 30px; background-color: #007BFF; color: white; font-size: 18px; border: none; border-radius: 8px; cursor: pointer;">Return Book</button>
+    </form>
+    
+    {% endif %}
+  
+  <a href="{% url 'book_list' %}" style="display: block; margin-top: 15px;">Back to Book List</a>
+{% endblock %}

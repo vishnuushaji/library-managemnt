@@ -1,0 +1,26 @@
+{% extends 'library/base.html' %}
+
+{% block content %}
+  <div style="text-align: center;">
+    <h1>Book List</h1>
+  </div>
+  <div style="display: flex; flex-wrap: wrap; justify-content: center;">
+    {% for book in books %}
+      <div style="border: 1px solid #ccc; margin: 10px; padding: 10px; max-width: 300px; text-align: center;">
+        {% if book.image %}
+          <img src="{{ book.image.url }}" alt="{{ book.title }}" style="max-width: 100px; max-height: 150px;">
+        {% endif %}
+        <h2><a href="{% if book.id %}{% url 'book_detail' book.id %}{% endif %}">{{ book.title }}</a></h2>
+        <p>{{ book.description }}</p>
+        {% if not book.borrowed %}
+          <form method="post" action="{% if book.id %}{% url 'borrow_book' book.id %}{% endif %}">
+            {% csrf_token %}
+            <input type="submit" value="Borrow">
+          </form>
+        {% else %}
+        <p style="font-size: 20px; color: red;">This book is currently borrowed.</p>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

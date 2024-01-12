@@ -1,0 +1,22 @@
+{% extends 'library/base.html' %}
+
+{% block content %}
+  <div style="max-width: 600px; margin: 0 auto; background-color: #D3D3D3; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <h2 style="text-align: center;">Borrow Book: {{ book.title }}</h2>
+
+    <form method="post" action="" style="margin-bottom: 20px;">
+      {% csrf_token %}
+      <div style="margin-bottom: 15px;">
+        <label for="{{ form.borrower_name.id_for_label }}">Enter name:</label>
+        {{ form.borrower_name }}
+      </div>
+      <div style="margin-bottom: 15px;">
+        <label for="{{ form.borrower_email.id_for_label }}">Enter Email:</label>
+        {{ form.borrower_email }}
+      </div>
+      <button type="submit" style="background-color: #4169E1; color: white; padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer;">Borrow</button>
+    </form>
+
+    <a href="{% url 'book_list' %}" style="text-align: center; display: block; color: #007BFF; text-decoration: none;">Cancel</a>
+  </div>
+{% endblock %}
