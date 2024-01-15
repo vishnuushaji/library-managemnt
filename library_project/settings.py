@@ -2,19 +2,22 @@ from pathlib import Path
 import os
 from decouple import config
 import dj_database_url
+import environ
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+# reading .env file
+environ.Env.read_env()
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
+# False if not in os.environ
+DEBUG = env('DEBUG')
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-x1c=fn8+i$n%46&l7(zi!!mc^#qh!yxec(wwh54vo9!$@0r^5$'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-
+# Raises django's ImproperlyConfigured exception if SECRET_KEY not in os.environ
+SECRET_KEY = env('SECRET_KEY')
 ALLOWED_HOSTS = ['127.0.0.1', '.vercel.app']
 
 
@@ -67,17 +70,15 @@ WSGI_APPLICATION = 'library_project.wsgi.application'
 
 # To use Neon with Django, you have to create a Project on Neon and specify the project connection settings in your settings.py in the same way as for standalone Postgres.
 
+# To use Neon with Django, you have to create a Project on Neon and specify the project connection settings in your settings.py in the same way as for standalone Postgres.
+
 DATABASES = {
-  'default': {
-    'ENGINE': 'django.db.backends.postgresql',
-    'NAME': 'appartment',
-    'USER': 'noufalmhd112',
-    'PASSWORD': 'Zch5pt9sGFJr',
-    'HOST': 'ep-weathered-hat-a1hfluej.ap-southeast-1.aws.neon.tech',
-    'PORT': '5432',
-    'OPTIONS': {'sslmode': 'require'},
-  }
+    # read os.environ['DATABASE_URL'] and raises ImproperlyConfigured exception if not found
+    'default': env.db(),
+    # read os.environ['SQLITE_URL']
+    'extra': env.db('PostgreSQL', default='postgresql://noufalmhd112:Zch5pt9sGFJr@ep-weathered-hat-a1hfluej.ap-southeast-1.aws.neon.tech/library?sslmode=require')
 }
+
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
