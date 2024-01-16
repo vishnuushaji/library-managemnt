@@ -1,9 +1,11 @@
 from django.urls import path
-from .views import book_list, book_detail, borrow_book, return_book
+from .views import BookListView, BookDetailView, BorrowBookView, ReturnBookView
+
+app_name = 'library'
 
 urlpatterns = [
-    path('books/', book_list, name='book_list'),
-    path('books/<int:book_id>/', book_detail, name='book_detail'),
-    path('books/<int:book_id>/borrow/', borrow_book, name='borrow_book'),
-    path('books/<int:book_id>/return/', return_book, name='return_book'),
+    path('books/', BookListView.as_view(), name='book-list'),
+    path('books/<int:book_id>/', BookDetailView.as_view(), name='book-detail'),
+    path('books/<int:book_id>/borrow/', BorrowBookView.as_view(), name='borrow-book'),
+    path('books/<int:book_id>/return/', ReturnBookView.as_view(), name='return-book'),
 ]

@@ -1,38 +1,42 @@
-# library/views.py
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404 , redirect
 from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.views import View
+from django.views.generic import ListView, DetailView
 from .models import Book
-from .forms import BookForm, BorrowForm
+from .forms import BorrowForm
 
-def book_list(request):
-    books = Book.objects.all()
-    return render(request, 'library/book_list.html', {'books': books})
+class BookListView(ListView):
+    model = Book
+    template_name = 'library/book_list.html'
+    context_object_name = 'books'
 
-def book_detail(request, book_id):
-    book = get_object_or_404(Book, pk=book_id)
-    return render(request, 'library/book_detail.html', {'book': book})
+class BookDetailView(DetailView):
+    model = Book
+    template_name = 'library/book_detail.html'
+    context_object_name = 'book'
+    pk_url_kwarg = 'book_id'
 
-def borrow_book(request, book_id):
-    book = get_object_or_404(Book, pk=book_id)
+class BorrowBookView(View):
+    template_name = 'library/borrow_book.html'
 
-    if request.method == 'POST':
-        form = BorrowForm(request.POST)
-        if form.is_valid():
-            borrower_name = form.cleaned_data['borrower_name']
-            borrower_email = form.cleaned_data['borrower_email']
+    def post(self, request, book_id):
+        book = get_object_or_404(Book, pk=book_id)
 
-            if not book.borrowed:
-                book.borrowed = True
-                book.save()
-                return HttpResponseRedirect('/library/books/') 
-    else:
-        form = BorrowForm()
+        if not book.borrowed:
+            book.borrowed = True
+            book.save()
 
-    return render(request, 'library/borrow_book.html', {'book': book, 'form': form})
-def return_book(request, book_id):
-    book = get_object_or_404(Book, pk=book_id)
+        return redirect(reverse('book-list'))
 
-    if book.borrowed:
-        book.borrowed = False
-        book.save()
-    return render(request, 'library/return_book.html', {'book_id': book_id})
+class ReturnBookView(View):
+    template_name = 'library/return_book.html'
+
+    def post(self, request, book_id):
+        book = get_object_or_404(Book, pk=book_id)
+
+        if book.borrowed:
+            book.borrowed = False
+            book.save()
+
+        return redirect(reverse('book-list'))

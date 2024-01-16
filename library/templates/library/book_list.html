@@ -10,11 +10,11 @@
         {% if book.image %}
           <img src="{{ book.image.url }}" alt="{{ book.title }}" style="max-width: 100px; max-height: 150px;">
         {% endif %}
-        <h2><a href="{% if book.id %}{% url 'book_detail' book.id %}{% endif %}">{{ book.title }}</a></h2>
+        <a href="{% if book.id %}{% url 'book-detail' book.id %}{% endif %}">{{ book.title }}</a>
         <p>{{ book.description }}</p>
         {% if not book.borrowed %}
-          <form method="post" action="{% if book.id %}{% url 'borrow_book' book.id %}{% endif %}">
-            {% csrf_token %}
+        <form method="post" action="{% if book.id %}{% url 'borrow-book' book.id %}{% endif %}">
+          {% csrf_token %}
             <input type="submit" value="Borrow">
           </form>
         {% else %}

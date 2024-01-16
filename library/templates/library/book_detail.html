@@ -20,7 +20,7 @@
   {% endif %}
 
   {% if not book.borrowed %}
-    <form method="post" action="{% url 'borrow_book' book.id %}">
+    <form method="post" action="{% url 'borrow-book' book.id %}">
       {% csrf_token %}
       <input type="submit" value="Borrow" style="margin-top: 40px;">
     </form>
@@ -28,12 +28,13 @@
 
   <p style="margin-top: 40px; font-size: 20px; color: red;">This book is currently borrowed!!</p>
 
-    <form method="post" action="{% url 'return_book' book.id %}">
-      {% csrf_token %}
-      <button type="submit" style="margin-top: 15px; padding: 15px 30px; background-color: #007BFF; color: white; font-size: 18px; border: none; border-radius: 8px; cursor: pointer;">Return Book</button>
-    </form>
+  <form method="post" action="{% url 'return-book' book.id %}">
+    {% csrf_token %}
+    <input type="submit" value="Return" style="margin-top: 40px;">
+</form>
+
     
     {% endif %}
   
-  <a href="{% url 'book_list' %}" style="display: block; margin-top: 15px;">Back to Book List</a>
+  <a href="{% url 'book-list' %}" style="display: block; margin-top: 15px;">Back to Book List</a>
 {% endblock %}
