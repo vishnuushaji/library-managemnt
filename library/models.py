@@ -5,7 +5,6 @@ class Book(models.Model):
     author = models.CharField(max_length=100)
     description = models.TextField()
     borrowed = models.BooleanField(default=False)
-    image = models.ImageField(upload_to='book_images/', blank=True, null=True)
 
     def __str__(self):
         return self.title

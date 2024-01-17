@@ -13,10 +13,11 @@
         <a href="{% if book.id %}{% url 'book-detail' book.id %}{% endif %}">{{ book.title }}</a>
         <p>{{ book.description }}</p>
         {% if not book.borrowed %}
-        <form method="post" action="{% if book.id %}{% url 'borrow-book' book.id %}{% endif %}">
-          {% csrf_token %}
-            <input type="submit" value="Borrow">
-          </form>
+        <a href="{% if book.id %}{% url 'book-detail' book.id %}{% endif %}" class="button-link">
+          {{ book.title }}
+          <button type="button" class="button-inside-link">Borrow</button>
+        </a>
+        
         {% else %}
         <p style="font-size: 20px; color: red;">This book is currently borrowed.</p>
         {% endif %}
